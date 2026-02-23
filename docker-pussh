@@ -323,12 +323,13 @@ forward_port() {
 
 # Check if the local Docker server needs a proxy when running in a VM (Docker/Rancher Desktop, Colima, etc.).
 is_docker_vm_proxy_needed() {
-    local info
+    local info os
     info=$(docker info 2>/dev/null)
+    os=$(uname -s)
 
     # macOS almost always needs a proxy for local Docker running in a VM.
     # However it's known that OrbStack works without it.
-    if [[ "$(uname -s)" == "Darwin" ]]; then
+    if [[ "${os}" == "Darwin" ]]; then
         [[ "${info}" =~ OrbStack ]] && return 1
         return 0
     fi
